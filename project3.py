@@ -3,7 +3,6 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
-from twython import Twython
 import json
 import pprint
 import re
