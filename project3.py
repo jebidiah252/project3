@@ -22,32 +22,17 @@ accessTokenSecret = 'udzdwTP1ljEbD0HJwIFzkUIBCpq0VVSCx9ewJxoyWptvL'
 
 twitter = Twython(app_key=apiKey, app_secret=apiSecret)
 
-statuses = twitter.search(q='"Ted Cruz", lang:en', tweet_mode='extended', count=5000)['statuses']
-for status in statuses:
-    if 'retweeted_status' in status:
-        status['full_text'] = status["retweeted_status"]['full_text']
+# %%
 
+# search = twitter.search(q='Ted Cruz', result_type='extended', verified='True', filter_out='retweets')['statuses']
 
-#%%
-texts = [status['full_text'] for status in statuses]
-
-# Legacy cards
-cruz = [text.lower().count('cruz') for text in texts]
-cancun = [text.lower().count('cancun') for text in texts]
-texas = [text.lower().count('texas') for text in texts]
-winter = [text.lower().count('winter') for text in texts]
-dhash = {'Cruz':cruz, 'Cancun':cancun, 'Texas':texas, 'winter': winter}
-#df = pd.DataFrame(data=d)
-
-#df.head(50)
-# search = twitter.search(q='"Danaerys", #GameOfThrones, since:2011-04-17', tweet_mode='extended', count=5000)
-# search = twitter.search(q='"Dani", love OR hate, #GameOfThrones, lang:en, until:2021-01-01, since:2011-04-17, -filter:links, -filter:replies')
-
-# print(search)
+# for i in search:
+#     if 'user' in i:
+#         print(i['user'])
+#         break
 
 #%%
 dhash = defaultdict(int)
-
 
 def getdaysago(days):
     return (datetime.today() - timedelta(days)).strftime('%Y-%m-%d')
@@ -83,13 +68,10 @@ def gethashtags(searchterm):
         if totalapirequests > 50:
             break
 
-
 dwords = defaultdict(int)
 
-
 def getpopwords(searchterm):
-    statuses = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=100, until=getdaysago(6))[
-        'statuses']
+    statuses = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=100, until=getdaysago(6))['statuses']
     newid = statuses[len(statuses) - 1]['id']
     endofweekid = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=1)['statuses'][0]['id']
 
@@ -172,18 +154,18 @@ def gethashtagsbyday(searchterm):
 ##############################################################
 
 # # get most popular words in tweet by tweets including search term
-# getpopwords('cruz')
+getpopwords('cruz')
 #
-# lists = sorted(dwords.items(), key=lambda item: item[1], reverse=True)
-# x, y = zip(*lists)  # unpack a list of pairs into two tuples
-# x = x[:10]
-# y = y[:10]
+lists = sorted(dwords.items(), key=lambda item: item[1], reverse=True)
+x, y = zip(*lists)  # unpack a list of pairs into two tuples
+x = x[:10]
+y = y[:10]
 #
 # # display most popular 10 tweets over timeframe starting 6 days ago and ending when
 # # i run out of api requests
 # # 900 / 15 min or 100,000 for a day
-# plt.plot(x, y)
-# plt.show()
+plt.plot(x, y)
+plt.show()
 
 # get most popular words in tweet by tweets including search term
 temp = gethashtagsbyday('cruz')
