@@ -129,21 +129,11 @@ print('Accuracy is:', classify.accuracy(classifier, test_data))
 
 print(classifier.show_most_informative_features(10))
 
-# %%
-
-# search = twitter.search(q='Ted Cruz', result_type='extended', verified='True', filter_out='retweets')['statuses']
-
-# for i in search:
-#     if 'user' in i:
-#         print(i['user'])
-#         break
-
 #%%
 dhash = defaultdict(int)
 
 def getdaysago(days):
     return (datetime.today() - timedelta(days)).strftime('%Y-%m-%d')
-
 
 def gethashtags(searchterm):
     statuses = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=100, until=getdaysago(6))[
@@ -247,18 +237,18 @@ def gethashtagsbyday(searchterm):
 
 
 # # get most popular hashtags by tweets including search term
-# gethashtags('cruz')
-#
-# lists = sorted(dhash.items(), key=lambda item: item[1], reverse=True)
-# x, y = zip(*lists)  # unpack a list of pairs into two tuples
-# x = x[:10]
-# y = y[:10]
-#
+gethashtags('cruz')
+
+lists = sorted(dhash.items(), key=lambda item: item[1], reverse=True)
+x, y = zip(*lists)  # unpack a list of pairs into two tuples
+x = x[:10]
+y = y[:10]
+
 # # display most popular 10 tweets over timeframe starting 6 days ago and ending when
 # # i run out of api requests
 # # 900 / 15 min or 100,000 for a day
-# plt.plot(x, y)
-# plt.show()
+plt.plot(x, y)
+plt.show()
 
 ##############################################################
 
