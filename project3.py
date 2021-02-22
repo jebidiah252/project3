@@ -76,13 +76,15 @@ def get_tweets_for_model(cleaned_tokens_list):
         yield dict([token, True] for token in tweet_tokens)
 
 apiKey = 'ISPrLuKZP3BhMjZ990qkKLA36'
+otherApiKey = 'guhIcMge19NItB1jW8p5iUcUm'
 apiSecret = 'feAaCueYAn0VYpqtK9YTu8RjCApsp25ABLwXjv3DTqcMKPvtGs'
+otherApiSecret = 'kQCweAdNyVM7yO8n0l2bk9fim4dnCCnVlFVXzYT4cWpdRHkvPv'
 bearerToken = 'AAAAAAAAAAAAAAAAAAAAADJiMwEAAAAASrtDxf6dOzIQpTd6m5kYbpb0aUI%3DbMcbJ078aEgDspPWybWjQOdZotz5aztxtIkmIHCR5hYfapmFgD'
 
 accessToken = '1417014738-JWmhcvHtNUBoHVNORu9ptoilzH0KoAs5loypVBD'
 accessTokenSecret = 'udzdwTP1ljEbD0HJwIFzkUIBCpq0VVSCx9ewJxoyWptvL'
 
-twitter = Twython(app_key=apiKey, app_secret=apiSecret)
+twitter = Twython(app_key=otherApiKey, app_secret=otherApiSecret)
 
 pos_tweets = twitter_samples.strings('positive_tweets.json')
 neg_tweets = twitter_samples.strings('negative_tweets.json')
@@ -177,7 +179,7 @@ dwords = defaultdict(int)
 dposneg = defaultdict(int)
 
 def getpopwords(searchterm):
-    statuses = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=100, until=getdaysago(6))['statuses']
+    statuses = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=100, until=getdaysago(6), remove='retweets')['statuses']
     newid = statuses[len(statuses) - 1]['id']
     endofweekid = twitter.search(q=searchterm, tweet_mode='extended', lang='en', count=1)['statuses'][0]['id']
 
@@ -285,11 +287,11 @@ plt.show()
 
 # %%
 
-d = { 'Positive':[dposneg['Positive']], 'Negative':[dposneg['Negative']] }
+d = { 'PerceivedTweets':['Positive', 'Negative'], 'NumTweets':[dposneg['Positive'], dposneg['Negative']] }
 
 df = pd.DataFrame(data=d)
 
-sns.displot(data=df)
+sns.histplot(data=df, x=df.PerceivedTweets, y=df.NumTweets)
 plt.figure()
 plt.show()
 
